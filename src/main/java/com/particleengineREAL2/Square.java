@@ -32,37 +32,35 @@ public class Square
     void draw() 
     {
         main.fill(squareColor); // set fill color of square
-        main.rect(x - size / 2, y - size / 2, size, size); // draw square
+        main.rectMode(PApplet.CENTER);
+        main.rect(x, y, size, size); // draw square
         move(); // call move
+
     }
 
     void move() 
     {
-        float speedFactor = PApplet.map(main.mouseX, 0, main.width, 0.5f, 2.0f); // map mouseX to a speed factor between 0.5 and 2.0
+        x += xVel; // update horizontal position
+        y += yVel; // update vertical position
 
-        // update x and y coordinates based on velocity and speed
-        x += xVel * speedFactor; 
-        y += yVel * speedFactor;
+        // Check horizontal boundaries
+        if (x > main.width - size / 2 || x < size / 2) 
+        {
+            xVel *= -1; // reverse horizontal direction
+        }
+        // Check vertical boundaries
+        if (y > main.height - size / 2 || y < size / 2) 
+        {
+            yVel *= -1; // reverse vertical direction
+        }
+    }
+
+    void scatter(float clickX, float clickY) 
+    {
+        xVel = (x - clickX) * 0.022f; // set horizontal velocity based on click distance
+        yVel = (y - clickY) * 0.022f; // set vertical velocity based on click distance
     
-        // check if square hits boundaries and if so reverse velocity 
-        if (x > main.width - size / 2 || x < size / 2) {
-            xVel *= -1;
-        }
-        if (y > main.height - size / 2 || y < size / 2) {
-            yVel *= -1;
-        }
     }
-
-    void scatter(float clickX, float clickY) {
-        float dx = x - clickX;
-        float dy = y - clickY;
-        float distance = PApplet.dist(x,y,clickX,clickY);
-        if (distance > 0) {
-            xVel = dx / distance * 5;
-            yVel = dy / distance * 5;
-        }
-    }
-
 
     // check if square is clicked based on distance from mouse
     boolean isClicked(float mx, float my) 
@@ -75,4 +73,47 @@ public class Square
     {
         this.squareColor = color; 
     }
+
+    void setSize(float newSize) 
+    {
+        size = newSize; // update new size
+    }
+
+    void reset(float x_, float y_, float xVel_, float yVel_) {
+        this.x = x_;
+        this.y = y_;
+        this.xVel = xVel_;
+        this.yVel = yVel_;
+    }
+
+    void checkBoundary(Circle other) 
+    {
+        // Basic collision detection between square and circle
+        float halfSize = size / 2;
+        float distance = PApplet.dist(x, y, other.x, other.y);
+        if (distance < halfSize + other.radius) 
+        {
+            xVel *= -1; 
+            yVel *= -1; 
+            other.xVel *= -1; 
+            other.yVel *= -1; 
+        }
+    }
+
+    void update() 
+    {
+        x += xVel;
+        y += yVel;
+
+        if (x < 0 || x > main.width - size) 
+        {
+            xVel *= -1; 
+        }
+        if (y < 0 || y > main.height - size) 
+        {
+            yVel *= -1; 
+        }
+    }
+
 }
+

@@ -78,4 +78,27 @@ public class Triangle
     {
         this.triangleColor = color; 
     }
+
+    void reset(float x_, float y_, float xVel_, float yVel_) {
+        this.x = x_;
+        this.y = y_;
+        this.xVel = xVel_;
+        this.yVel = yVel_;
+    }
+
+    public float getSize() 
+    {
+        return size;
+    }
+    
+    void setSize(float newSize) 
+    {
+        size = newSize; // update size directly
+    }
+
+    public void mouseClickedBehavior() 
+    {
+        setSize(getSize() + 5);
+    }
+    
 }
