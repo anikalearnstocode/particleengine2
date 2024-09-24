@@ -77,7 +77,7 @@ public class Circle
         radius = newSize / 2; // update radius based on new size
     }
 
-    void reset(float x_, float y_, float xVel_, float yVel_) 
+    void reset(float x_, float y_, float xVel_, float yVel_) //reset x pos, y pos, horiz vel, vert vel
     {
         this.x = x_;
         this.y = y_;   
@@ -85,10 +85,10 @@ public class Circle
         this.yVel = yVel_;
     }
 
-    void checkBoundary(Circle other)
+    void checkBoundary(Circle other) //collission detection
     {
-        float distance = PApplet.dist(x,y,other.x,other.y);
-        if(distance < radius + other.radius)
+        float distance = PApplet.dist(x,y,other.x,other.y); //check distance
+        if(distance < radius + other.radius) //if distance less than half of other radius, reverse
         {
             xVel *= -1;
             yVel *= -1;
@@ -97,12 +97,12 @@ public class Circle
         }
     }
 
-    void update() 
+    void update() //update x and y positions 
     {
         x += xVel;
         y += yVel;
 
-        if (x < radius || x > main.width - radius) 
+        if (x < radius || x > main.width - radius) //check boundaries of window and reverse if necessary
         {
             xVel *= -1;
         }
@@ -112,16 +112,16 @@ public class Circle
         }
     }
 
-    public float getRadius()
+    public float getRadius() //getter
     {
         return radius;
     }
-    void setRadius(float newRadius) 
+    void setRadius(float newRadius) //setter
     {
         radius = newRadius; // update new size
     }
 
-    public void mouseClickedBehavior()
+    public void mouseClickedBehavior() //if clicked, shrink radius by 10
     {
         setRadius(getRadius() - 10);
     }

@@ -25,10 +25,9 @@ public class Main extends PApplet
 
     public void setup()
     {
-        shapes = new Shapes(this);
+        shapes = new Shapes(this); //create new shape object
 
     }
-    
 
     public void draw()
     {
@@ -45,7 +44,7 @@ public class Main extends PApplet
     public void mousePressed()
     {
         shapes.mousePressed(mouseX, mouseY); // call mousePressed in Super class when mouse is pressed
-        shapes.mouseClicked();
+        shapes.mouseClicked(); //invoke mouseClicked method onto shapes
 
     }
 

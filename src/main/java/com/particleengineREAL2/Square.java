@@ -71,14 +71,14 @@ public class Square
     // set square color
     void setColor(int color) 
     {
-        this.squareColor = color; 
+        this.squareColor = color; //update sq color
     }
 
-    public float getSize()
+    public float getSize() //getter
     {
-        return size;
+        return size; 
     }
-    void setSize(float newSize) 
+    void setSize(float newSize) //setter
     {
         size = newSize; // update new size
     }
@@ -88,19 +88,19 @@ public class Square
         setSize(getSize() - 5);
     }
 
-    void reset(float x_, float y_, float xVel_, float yVel_) {
-        this.x = x_;
-        this.y = y_;
-        this.xVel = xVel_;
-        this.yVel = yVel_;
+    void reset(float x_, float y_, float xVel_, float yVel_) 
+    {
+        this.x = x_; //reset x pos
+        this.y = y_; //reset y pos
+        this.xVel = xVel_; // reset horizontal vel
+        this.yVel = yVel_; // reset vert vel
     }
 
-    void checkBoundary(Circle other) 
+    void checkBoundary(Circle other) //collission detection
     {
-        // Basic collision detection between square and circle
-        float halfSize = size / 2;
-        float distance = PApplet.dist(x, y, other.x, other.y);
-        if (distance < halfSize + other.radius) 
+        float halfSize = size / 2; //half sq size
+        float distance = PApplet.dist(x, y, other.x, other.y); //calculate dist to circ
+        if (distance < halfSize + other.radius) //if distance less than combined radius sizes, reverse direction
         {
             xVel *= -1; 
             yVel *= -1; 
@@ -109,13 +109,13 @@ public class Square
         }
     }
 
-    void update() 
+    void update() //called to update position
     {
-        x += xVel;
+        x += xVel; //update x and y pos based on velocity
         y += yVel;
 
         
-        if (x < 0 || x > main.width - size) 
+        if (x < 0 || x > main.width - size) //check boundaries to reverse if out of bounds
         {
             xVel *= -1; 
         }
