@@ -18,6 +18,7 @@ public class Circle
     float yVel; // vertical velocity
     float radius; // radius of the circle
     int circleColor; // color of the circle
+    
 
     Circle(float x_, float y_, float radius_, PApplet main_, int c, float xVel_, float yVel_) // constructor for Circle class
     {
@@ -109,6 +110,20 @@ public class Circle
         {
             yVel *= -1;
         }
+    }
+
+    public float getRadius()
+    {
+        return radius;
+    }
+    void setRadius(float newRadius) 
+    {
+        radius = newRadius; // update new size
+    }
+
+    public void mouseClickedBehavior()
+    {
+        setRadius(getRadius() - 10);
     }
 
 }

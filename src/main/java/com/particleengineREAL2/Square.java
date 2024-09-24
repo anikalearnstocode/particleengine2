@@ -74,9 +74,18 @@ public class Square
         this.squareColor = color; 
     }
 
+    public float getSize()
+    {
+        return size;
+    }
     void setSize(float newSize) 
     {
         size = newSize; // update new size
+    }
+
+    public void mouseClickedBehavior()
+    {
+        setSize(getSize() - 5);
     }
 
     void reset(float x_, float y_, float xVel_, float yVel_) {
@@ -105,6 +114,7 @@ public class Square
         x += xVel;
         y += yVel;
 
+        
         if (x < 0 || x > main.width - size) 
         {
             xVel *= -1; 

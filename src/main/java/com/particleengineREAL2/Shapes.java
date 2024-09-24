@@ -211,6 +211,11 @@ public class Shapes
             shapeResize(50);  // Resize all shapes to 50 on pressing 'r'
         }
 
+        if (main.key == 'w' || main.key == 'W')
+        {
+            backgroundColor = (255);
+        }
+
     }
 
     void changeCircleColors() 
@@ -255,8 +260,8 @@ public class Shapes
 
      void mouseClicked() {
         boolean triangleClicked = false;
-       // boolean squareClicked = false;
-      //  boolean circleClicked = false;
+        boolean squareClicked = false;
+        boolean circleClicked = false;
     //     for (Circle circle : circles)
     //     {
     //         if (circle.isClicked(main.mouseX, main.mouseY)) 
@@ -266,16 +271,23 @@ public class Shapes
     //         }
     //     }
 
-        // for (Square sq : squares) {
-        //     if (sq.isClicked(main.mouseX, main.mouseY)) {
-        //         squareClicked = true;
-        //         break;
-        //     }
-        // }
+        for (Square sq : squares) {
+            if (sq.isClicked(main.mouseX, main.mouseY)) {
+                squareClicked = true;
+                break;
+            }
+        }
     
         for (Triangle tri : triangles) {
             if (tri.isClicked(main.mouseX, main.mouseY)) {
                 triangleClicked = true;
+                break;
+            }
+        }
+
+        for (Circle circle : circles) {
+            if (circle.isClicked(main.mouseX, main.mouseY)) {
+                circleClicked = true;
                 break;
             }
         }
@@ -288,13 +300,21 @@ public class Shapes
             }
         }
 
-        // if (squareClicked)
-        // {
-        //     for (Square sq : squares)
-        //     {
-        //         sq.rotate(PApplet.PI / 4);
-        //     }
-        // }
+        if (squareClicked)
+        {
+            for (Square sq : squares)
+            {
+                sq.setSize(sq.getSize() - 5);
+            }
+        }
+
+        if (circleClicked)
+        {
+            for (Circle circle : circles)
+            {
+                circle.setRadius(circle.getRadius() -10);
+            }
+        }
     }
 }
 
