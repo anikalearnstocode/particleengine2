@@ -10,36 +10,57 @@ package com.particleengineREAL2;
 
 import processing.core.*;
 
-public class Square extends Shape
+public class Square 
 {
+    PApplet main;
+    float x, y; // location of the square
+    float xVel; // horizontal velocity
+    float yVel; // vertical velocity
+    float size; // size of the square
+    int squareColor; // color of the square
 
-    
     Square(float x_, float y_, float size_, PApplet main_, int c, float xVel_, float yVel_) // constructor for SquareParticle class
     {
-        super( x_,  y_,  size_,  main_,  c,  xVel_,  yVel_);
-        // x = x_; y = y_; // initial x and y coordinates
-        // size = size_; // initialize size
-        // main = main_; // assign PApplet reference
-        // squareColor = c; // set square color
-        // xVel = xVel_; // set horizontal velocity
-        // yVel = yVel_; // set vertical velocity
+        x = x_; y = y_; // initial x and y coordinates
+        size = size_; // initialize size
+        main = main_; // assign PApplet reference
+        squareColor = c; // set square color
+        xVel = xVel_; // set horizontal velocity
+        yVel = yVel_; // set vertical velocity
     }
 
     void draw() 
     {
-        super.draw();
+        main.fill(squareColor); // set fill color of square
         main.rectMode(PApplet.CENTER);
         main.rect(x, y, size, size); // draw square
-        //move(); // call move
+        move(); // call move
 
     }
 
-    // void move() 
-    // {
+    void move() 
+    {
+        x += xVel; // update horizontal position
+        y += yVel; // update vertical position
 
-    //     super.move();
+        // Check horizontal boundaries
+        if (x > main.width - size / 2 || x < size / 2) 
+        {
+            xVel *= -1; // reverse horizontal direction
+        }
+        // Check vertical boundaries
+        if (y > main.height - size / 2 || y < size / 2) 
+        {
+            yVel *= -1; // reverse vertical direction
+        }
+    }
 
-    // }
+    void scatter(float clickX, float clickY) 
+    {
+        xVel = (x - clickX) * 0.022f; // set horizontal velocity based on click distance
+        yVel = (y - clickY) * 0.022f; // set vertical velocity based on click distance
+    
+    }
 
     // check if square is clicked based on distance from mouse
     boolean isClicked(float mx, float my) 
@@ -47,6 +68,11 @@ public class Square extends Shape
         return mx >= x - size / 2 && mx <= x + size / 2 && my >= y - size / 2 && my <= y + size / 2; // return true if within bounds
     }
 
+    // set square color
+    void setColor(int color) 
+    {
+        this.squareColor = color; //update sq color
+    }
 
     public float getSize() //getter
     {
@@ -62,10 +88,13 @@ public class Square extends Shape
         setSize(getSize() - 5);
     }
 
-    // void reset() 
-    // {
-    //     super.reset(circleRadius, circleRadius, circleRadius, circleRadius);
-    // }
+    void reset(float x_, float y_, float xVel_, float yVel_) 
+    {
+        this.x = x_; //reset x pos
+        this.y = y_; //reset y pos
+        this.xVel = xVel_; // reset horizontal vel
+        this.yVel = yVel_; // reset vert vel
+    }
 
     void checkBoundary(Circle other) //collission detection
     {

@@ -3,41 +3,50 @@ Circle.java
 Author: Anika Krieger
 Project Name: Particle Engine 2
 Date: September 19
-Description: Circle - sets up circular particle and movement
+Description: Shape
 */
 
 package com.particleengineREAL2;
 
 import processing.core.PApplet;
 
-public class Circle extends Shape
+public class Shape
 {
-     
-    Circle(float x_, float y_, float radius_, PApplet main_, int c, float xVel_, float yVel_) // constructor for Circle class
+    PApplet main;
+ 
+    //int circleColor; // color of the circle
+
+    float x, y; // location of the square
+    float xVel; // horizontal velocity
+    float yVel; // vertical velocity
+    float size; // size of the square
+    float radius; // radius of the circle
+    
+
+
+    int color; 
+    
+    Shape(float x_, float y_, float radius_, PApplet main_, int c, float xVel_, float yVel_) // constructor for Circle class
     {
-        super( x_,  y_,  radius_,  main_,  c,  xVel_,  yVel_);
-        // x = x_; y = y_; // initial x and y coordinates
-        // radius = radius_; // initialize radius
-        // main = main_; // assign PApplet reference
-        // circleColor = c; // set circle color
-        // xVel = xVel_; // set horizontal velocity
-        // yVel = yVel_; // set vertical velocity
-
-
+        main = main_;
+        x = x_; y = y_; // initial x and y coordinates
+        radius = radius_; // initialize radius
+        size = radius_;
+        main = main_; // assign PApplet reference
+        color = c; // set circle color
+        xVel = xVel_; // set horizontal velocity
+        yVel = yVel_; // set vertical velocity
     }
 
     void draw() 
     {   
-
-        super.draw();
-        main.ellipse(x, y, radius * 2, radius * 2); // draw circle
-        move(); // call move
-        
+        main.fill(color); // set fill color of circle
+        // main.ellipse(x, y, radius * 2, radius * 2); // draw circle
+        // move(); // call move
     }
 
     void move() 
     {
-        super.move();
         
         if (x > main.width || x < 0) // check horizontal boundaries
         {
@@ -55,6 +64,10 @@ public class Circle extends Shape
         yVel = (y - clickY) * 0.022f; // set vertical velocity based on click distance
     }
 
+    void setColor(int newColor) 
+    {
+        color = newColor; // change circle color
+    }
 
     boolean isClicked(float mouseX, float mouseY) 
     {
@@ -71,7 +84,7 @@ public class Circle extends Shape
     //     super.reset(circleRadius, circleRadius, circleRadius, circleRadius);
     // }
 
-    void checkBoundary(Circle other) //collission detection
+    void checkBoundary(Shape other) //collission detection
     {
         float distance = PApplet.dist(x,y,other.x,other.y); //check distance
         if(distance < radius + other.radius) //if distance less than half of other radius, reverse
@@ -110,6 +123,11 @@ public class Circle extends Shape
     public void mouseClickedBehavior() //if clicked, shrink radius by 10
     {
         setRadius(getRadius() - 10);
+    }
+
+    int getColor()
+    {
+        return color; 
     }
 
 }

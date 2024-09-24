@@ -131,24 +131,6 @@ public class Shapes
         }
     }
 
-    // void move() {
-    //     x += xVel; // update horizontal position
-    //     y += yVel; // update vertical position
-
-
-    //      // Check horizontal boundaries
-    //      if (x > main.width - size / 2 || x < size / 2) 
-    //      {
-    //          xVel *= -1; // reverse horizontal direction
-    //      }
-    //      // Check vertical boundaries
-    //      if (y > main.height - size / 2 || y < size / 2) 
-    //      {
-    //          yVel *= -1; // reverse vertical direction
-    //      }
-
-    // }
-
     //resize all shapes to a new size (will be relevant for keyPressed)
     void shapeResize(float newSize)
     {
@@ -177,7 +159,7 @@ public class Shapes
         {
             if (circle.isClicked(main.mouseX, main.mouseY)) 
             {
-                backgroundColor = circle.color; 
+                backgroundColor = circle.circleColor; 
                 break; 
             }
         }
@@ -186,7 +168,7 @@ public class Shapes
         {
             if (sq.isClicked(main.mouseX, main.mouseY)) 
             {
-                backgroundColor = sq.getColor(); 
+                backgroundColor = sq.squareColor; 
                 break;
             }
         }
@@ -195,7 +177,7 @@ public class Shapes
         {
             if (tri.isClicked(main.mouseX, main.mouseY)) 
             {
-                backgroundColor = tri.getColor();
+                backgroundColor = tri.triangleColor;
                 break;
             }
         }
@@ -290,6 +272,7 @@ public class Shapes
     
     }
 
+
      void mouseClicked() 
      {
         boolean triangleClicked = false; //check to see if __ was clicked... (start as false always)
@@ -348,14 +331,6 @@ public class Shapes
             }
         }
     }
-
-    // void reset(float x_, float y_, float xVel_, float yVel_) //reset x and y positions and velocities
-    // {
-    //     this.x = x_;
-    //     this.y = y_;
-    //     this.xVel = xVel_;
-    //     this.yVel = yVel_;
-    // }
 }
 
     
