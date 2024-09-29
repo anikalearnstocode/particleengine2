@@ -1,133 +1,91 @@
 /*
-Circle.java
+Shape.java
 Author: Anika Krieger
-Project Name: Particle Engine 2
-Date: September 19
-Description: Shape
+Project Name: Particle Engine 3
+Date: September 25
+Description: Parent class
 */
 
 package com.particleengineREAL2;
 
 import processing.core.PApplet;
 
-public class Shape
-{
+public abstract class Shape {
+    // Common properties for all shapes
+    float x, y, size;
+    float xVel;
+    float yVel;
     PApplet main;
- 
-    //int circleColor; // color of the circle
-
-    float x, y; // location of the square
-    float xVel; // horizontal velocity
-    float yVel; // vertical velocity
-    float size; // size of the square
-    float radius; // radius of the circle
+   // int color;
     
-
-
-    int color; 
-    
-    Shape(float x_, float y_, float radius_, PApplet main_, int c, float xVel_, float yVel_) // constructor for Circle class
-    {
-        main = main_;
-        x = x_; y = y_; // initial x and y coordinates
-        radius = radius_; // initialize radius
-        size = radius_;
-        main = main_; // assign PApplet reference
-        color = c; // set circle color
-        xVel = xVel_; // set horizontal velocity
-        yVel = yVel_; // set vertical velocity
+        // Constructor to initialize common attributes
+        Shape(float x_, float y_, float size_, PApplet main_, float xVel_, float yVel_) {
+            this.x = x_;
+            this.y = y_;
+            this.size = size_;
+            this.main = main_;       
+            this.xVel = xVel_; // X velocity
+            this. yVel = yVel_; // Y velocity
     }
 
-    void draw() 
-    {   
-        main.fill(color); // set fill color of circle
-        // main.ellipse(x, y, radius * 2, radius * 2); // draw circle
-        // move(); // call move
-    }
+    // Abstract methods to be implemented by subclasses
+    public abstract void draw();  // Each shape will implement its own drawing logic
+    public abstract void update(); // Each shape can have its own movement logic
+    public abstract void mouseClicked();
 
-    void move() 
-    {
-        
-        if (x > main.width || x < 0) // check horizontal boundaries
-        {
-            xVel *= -1; // reverse horizontal direction
-        }
-        if (y > main.height || y < 0) // check vertical boundaries
-        {
-            yVel *= -1; // reverse vertical direction
-        }
-    }
-
-    void scatter(float clickX, float clickY) 
-    {
-        xVel = (x - clickX) * 0.022f; // set horizontal velocity based on click distance
-        yVel = (y - clickY) * 0.022f; // set vertical velocity based on click distance
-    }
-
-    void setColor(int newColor) 
-    {
-        color = newColor; // change circle color
-    }
-
-    boolean isClicked(float mouseX, float mouseY) 
-    {
-        return PApplet.dist(mouseX, mouseY, x, y) < radius; // check if mouse is inside circle
-    }
-
-    void setSize(float newSize) 
-    {
-        radius = newSize / 2; // update radius based on new size
-    }
-
-    // void reset()
-    // {
-    //     super.reset(circleRadius, circleRadius, circleRadius, circleRadius);
-    // }
-
-    void checkBoundary(Shape other) //collission detection
-    {
-        float distance = PApplet.dist(x,y,other.x,other.y); //check distance
-        if(distance < radius + other.radius) //if distance less than half of other radius, reverse
-        {
-            xVel *= -1;
-            yVel *= -1;
-            other.xVel *= -1;
-            other.yVel *= -1;
-        }
-    }
-
-    void update() //update x and y positions 
-    {
+    // Common move behavior for all shapes
+    public void move() {
         x += xVel;
         y += yVel;
 
-        if (x < radius || x > main.width - radius) //check boundaries of window and reverse if necessary
-        {
-            xVel *= -1;
+        // Bounce off screen edges
+        
+        checkBoundary(null); // Check if shape hits the screen boundaries
+    }
+
+    // Common boundary check for all shapes
+    public void checkBoundary(Shape other) {
+        // if (x < 0 || x > main.width) {
+        //     xVel *= -1; // Reverse direction when hitting horizontal boundary
+        // }
+        // if (y < 0 || y > main.height) {
+        //     yVel *= -1; // Reverse direction when hitting vertical boundary
+        // }
+
+            float distance = PApplet.dist(this.x, this.y, other.x, other.y); // Calculate distance between two shapes
+            float combinedSize = this.size + other.size; // Sum of radii (or size equivalents)
+    
+            // If distance between centers is less than combined sizes, collision occurs
+            if (distance < combinedSize) {
+                // Reverse velocities of both shapes (basic collision response)
+                this.xVel *= -1;
+                this.yVel *= -1;
+                other.xVel *= -1;
+                other.yVel *= -1;
+            }
         }
-        if (y < radius || y > main.height - radius) 
-        {
-            yVel *= -1;
-        }
+    
+
+    // Getter and Setter for size (can be overridden if necessary in subclasses)
+    public float getSize() {
+        return size;
     }
 
-    public float getRadius() //getter
-    {
-        return radius;
-    }
-    void setRadius(float newRadius) //setter
-    {
-        radius = newRadius; // update new size
+    public void setSize(float newSize) {
+        this.size = newSize;
     }
 
-    public void mouseClickedBehavior() //if clicked, shrink radius by 10
-    {
-        setRadius(getRadius() - 10);
+    // Optional: Add mouse interaction methods (abstract if subclasses need to implement them differently)
+    public boolean isClicked(float mx, float my) {
+        // Generic bounding box check (can be overridden by subclasses for more precise detection)
+        return mx >= x - size / 2 && mx <= x + size / 2 && my >= y - size / 2 && my <= y + size / 2;
     }
 
-    int getColor()
-    {
-        return color; 
-    }
+    // public int getColor() 
+    // { return color; }
 
+    // public void setColor(int color) { // Setter for color
+    //     this.color = color;
+    // }
+   
 }
