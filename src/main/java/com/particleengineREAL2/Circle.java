@@ -11,13 +11,17 @@ package com.particleengineREAL2;
 import processing.core.PApplet;
 
 public class Circle extends Shape {
+
+    private int color;
     
     public Circle(float x_, float y_, float size_, PApplet main_, float xVel_, float yVel_) { // Constructor for Square class
         super(x_, y_, size_, main_, xVel_, yVel_); // Call to parent class constructor
+        this.color = main.color(0);
     }
 
     @Override
     public void draw() {
+        main.fill(color);
         main.ellipse(x, y, size, size); // Draw circle
     }
 
@@ -35,10 +39,13 @@ public class Circle extends Shape {
 
     @Override
     public void update() {
-        move();   
+        move();  
+        checkBoundary(); 
+
     }
 
     public void mouseClicked() {
+        color = main.color(0,255,0);
         size += 5; // Increase size on mouse click
     }
         

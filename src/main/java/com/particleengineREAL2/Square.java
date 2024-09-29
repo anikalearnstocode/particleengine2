@@ -12,7 +12,7 @@ import processing.core.PApplet;
 
 public class Square extends Shape {
     
-    public Square(float x_, float y_, float size_, PApplet main_, float xVel_, float yVel_, float f) { // Constructor for Square class
+    public Square(float x_, float y_, float size_, PApplet main_, float xVel_, float yVel_) { // Constructor for Square class
         super(x_, y_, size_, main_, xVel_, yVel_); // Call to parent class constructor
     }
 
@@ -35,7 +35,9 @@ public class Square extends Shape {
 
     @Override
     public void update() {
-        move();   
+        move();  
+        checkBoundary(); 
+ 
     }
 
     public void mouseClicked() {

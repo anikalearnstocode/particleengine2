@@ -11,4 +11,9 @@ public abstract class GameState {
     public abstract void draw(); // Method to draw the state
     public abstract void update(); // Method to update the state
     public abstract void handleInput(); // Method to handle input
+
+    public abstract void mousePressed(int mouseX, int mouseY);
+    public abstract void mouseDragged(int mouseX, int mouseY);
+    public abstract void mouseReleased();
+
 }

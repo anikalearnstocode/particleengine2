@@ -1,24 +1,23 @@
-/*
-Main.java
-Author: Anika Krieger
-Project Name: Particle Engine 3
-Date: September 25
-Description: Particle Engine 2
-*/
-
 package com.particleengineREAL2;
 
 import processing.core.PApplet;
-import java.util.ArrayList;
+import processing.core.PImage;
 
 public class Main extends PApplet {
-    ArrayList<Shape> shapes = new ArrayList<>(); // Store all shapes here
-    int state = 0; // Game state - 0: title screen, 1: game state 1, etc.
-    Shape selectedShape = null;
+    GameState currentState; // Current game state
+    TitleState titleState;
+    CircleState circleState;
+    TriangleState triangleState;
+    SquareState squareState;
+
+    PImage bathtub;
+    float tubX = 400; // Example values, adjust as needed
+    float tubY = 550; // Example values, adjust as needed
+    float pixelWidth = 400; // Example values, adjust as needed
+    float pixelHeight = 200; // Example values, adjust as needed
 
     public static void main(String[] args) {
         PApplet.main("com.particleengineREAL2.Main");
-        PApplet.main("Main");
     }
 
     public void settings() {
@@ -26,76 +25,67 @@ public class Main extends PApplet {
     }
 
     public void setup() {
-        initializeGameState1(); // First game state
 
-        shapes = new ArrayList<>();
+        bathtub = loadImage(Main.class.getResource("/Bathtub.png").getPath());
+        
 
-        for (int i = 0; i < 10; i++) {
-            shapes.add(new Circle(random(width), random(height), 30, this, random(-2, 2), random(-2, 2))); // Removed the 'i' argument
-            shapes.add(new Triangle(random(width), random(height), 40, this, random(-2, 2), random(-2, 2), i));
-            shapes.add(new Square(random(width), random(height), 50, this, random(-2, 2), random(-2, 2), i));
-        }
+        titleState = new TitleState(this);
+        circleState = new CircleState(this);
+        triangleState = new TriangleState(this);
+        squareState = new SquareState(this);
+
+        currentState = titleState;
     }
 
     public void draw() {
-        background(255); // Clear background
-
-        // Different behaviors based on state
-        if (state == 0) {
-            drawTitleScreen();
-        } else if (state == 1) {
-            playState1();
-        }
-    }
-
-    // Title screen
-    void drawTitleScreen() {
-        textSize(50);
-        fill(0);
-        textAlign(CENTER);
-        text("ROUND UP YOUR TOYS GAME", 400, 250);
-        text("Press P to Play!", width / 2, height / 2 + 100);
-    }
-
-    // Game state 1: Drag circles into a cup
-    void playState1() {
-        for (Shape shape : shapes) {
-            shape.update(); // Polymorphic update
-            shape.draw();   // Polymorphic draw
-        }
-        // Call your drag-and-drop logic here
-    }
-
-    void initializeGameState1() {
-        // Create some circles for the first state
-        for (int i = 0; i < 20; i++) {
-            shapes.add(new Circle(random(width), random(height), 30, this, random(-2, 2), random(-2, 2))); // Removed the 'i' argument
-
-        }
+        currentState.draw(); // Call the draw method of the current state
     }
 
     public void keyPressed() {
-        if (state == 0) {
-            state = 1; // Transition to game state 1
+        if (key == 'P' || key == 'p') {
+            currentState = circleState; // Switch to the circle round state
+        } else if (key == 'T' || key == 't') {
+            currentState = triangleState; // Switch to the triangle round state
+        } else if (key == 'S' || key == 's') {
+            currentState = squareState; // Switch to the square round state
         }
     }
 
     public void mousePressed() {
-        for (Shape shape : shapes) {
-            if (shape instanceof Circle && ((Circle) shape).isClicked(mouseX, mouseY)) {
-                selectedShape = shape; // Store reference to clicked shape
-            }
-        }
+        // if (currentState instanceof CircleState) {
+        //     ((CircleState) currentState).mousePressed(mouseX, mouseY);
+        // } else if (currentState instanceof TriangleState) {
+        //     ((TriangleState) currentState).mousePressed(mouseX, mouseY);
+        // } else if (currentState instanceof SquareState) {
+        //     ((SquareState) currentState).mousePressed(mouseX, mouseY);
+        // }
+
+        currentState.mousePressed(mouseX, mouseY);
     }
-    
+
     public void mouseDragged() {
-        if (selectedShape != null) {
-            selectedShape.x = mouseX;
-            selectedShape.y = mouseY;
-        }
+        // if (currentState instanceof CircleState) {
+        //     ((CircleState) currentState).mouseDragged(mouseX, mouseY);
+        // } else if (currentState instanceof TriangleState) {
+        //     ((TriangleState) currentState).mouseDragged(mouseX, mouseY);
+        // } else if (currentState instanceof SquareState) {
+        //     ((SquareState) currentState).mouseDragged(mouseX, mouseY);
+        // }
+
+        currentState.mouseDragged(mouseX, mouseY);
     }
-    
+
     public void mouseReleased() {
-        selectedShape = null; // Deselect shape when mouse is released
+        // if (currentState instanceof CircleState) {
+        //     ((CircleState) currentState).mouseReleased();
+        // } else if (currentState instanceof TriangleState) {
+        //     ((TriangleState) currentState).mouseReleased();
+        // } else if (currentState instanceof SquareState) {
+        //     ((SquareState) currentState).mouseReleased();
+        // }
+
+        currentState.mouseReleased();
     }
+
+	public void drawTitleState() {}
 }
