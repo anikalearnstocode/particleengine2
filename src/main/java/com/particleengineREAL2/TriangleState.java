@@ -15,7 +15,7 @@ public class TriangleState extends GameState {
 
     public void initializeShapes() {
         for (int i = 0; i < 10; i++) {
-            shapes.add(new Triangle(main.random(main.width), main.random(main.height), 30, main, main.random(-2, 2), main.random(-2, 2)));
+            shapes.add(new Triangle(main.random(main.width), main.random(main.height), 60, main, main.random(-2, 2), main.random(-2, 2)));
         }
     }
 

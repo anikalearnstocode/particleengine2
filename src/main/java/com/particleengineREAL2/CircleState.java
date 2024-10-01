@@ -17,7 +17,7 @@ public class CircleState extends GameState {
     {
         for (int i = 0; i < 10; i++)
         {
-            shapes.add(new Circle(main.random(main.width), main.random(main.height), 50, main, main.random(-2, 2), main.random(-2, 2)));
+            shapes.add(new Circle(main.random(main.width), main.random(main.height), 80, main, main.random(-2, 2), main.random(-2, 2)));
         }
     }
 

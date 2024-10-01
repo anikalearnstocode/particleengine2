@@ -15,7 +15,7 @@ public class SquareState extends GameState {
 
     public void initializeShapes() {
         for (int i = 0; i < 10; i++) {
-            shapes.add(new Square(main.random(main.width), main.random(main.height), 30, main, main.random(-2, 2), main.random(-2, 2)));
+            shapes.add(new Square(main.random(main.width), main.random(main.height), 40, main, main.random(-2, 2), main.random(-2, 2)));
         }
     }
 
@@ -50,3 +50,4 @@ public class SquareState extends GameState {
         super.mouseReleased(); // Use parent implementation
     }
 }
+

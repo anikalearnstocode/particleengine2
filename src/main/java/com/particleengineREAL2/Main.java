@@ -17,8 +17,7 @@ public class Main extends PApplet {
     float pixelHeight = 200; // Example values, adjust as needed
 
     public static void main(String[] args) {
-        PApplet.main("com.particleengineREAL2.Main");
-    }
+        PApplet.main("com.particleengineREAL2.Main");    }
 
     public void settings() {
         size(800, 600); // Set up canvas size
@@ -76,6 +75,14 @@ public class Main extends PApplet {
     }
 
     public void mousePressed() {
+        // if (currentState != null && currentState.shapes != null) {
+        //     for (Shape shape : currentState.shapes) {
+        //         if (shape.isClicked(mouseX, mouseY)) {
+        //             shape.scatter(mouseX, mouseY); // Call the scatter method on the clicked shape
+        //         }
+        //     }
+        // }
+
         currentState.mousePressed(mouseX, mouseY);
     }
 

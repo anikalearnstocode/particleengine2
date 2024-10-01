@@ -46,11 +46,22 @@ public class Circle extends Shape {
         move();  
         checkBoundary(); 
         for (Shape other : shapes) {
-            if (other instanceof Circle && other != this && checkCollission(other)) {
+            if (other != this && checkCollission(other)) {
                 handleCollision(other); // Handle collision with another Circle
             }
         }
     }
+
+    // @Override
+    // public void scatter(float clickX, float clickY) {
+    //     float dx = x - clickX;
+    //     float dy = y - clickY;
+    //     float distance = PApplet.dist(x, y, clickX, clickY);
+    //     if (distance > 0) {
+    //         xVel = dx / distance * 5;
+    //         yVel = dy / distance * 5;
+    //     }
+    // }
     
 
     public void mouseClicked() {

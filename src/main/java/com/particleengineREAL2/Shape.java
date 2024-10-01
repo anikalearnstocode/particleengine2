@@ -70,6 +70,8 @@ public abstract class Shape {
     public abstract void draw();  // Each shape will implement its own drawing logic
     public abstract void update(ArrayList<Shape> shapes); // Pass shapes list for collision checks
     public abstract void mouseClicked();
+    //public abstract void scatter(float clickX, float CkickY);
+    
 
     // Common move behavior for all shapes
     public void move() {
@@ -142,5 +144,16 @@ public abstract class Shape {
         this.yVel *= -1;
         other.xVel *= -1;
         other.yVel *= -1;
+
+        float overlap = (this.size / 2 + other.size / 2) - PApplet.dist(this.x, this.y, other.x, other.y);
+    if (overlap > 0) {
+        float pushX = (other.x - this.x) / PApplet.dist(this.x, this.y, other.x, other.y);
+        float pushY = (other.y - this.y) / PApplet.dist(this.x, this.y, other.x, other.y);
+        this.x -= pushX * overlap / 2;
+        this.y -= pushY * overlap / 2;
+        other.x += pushX * overlap / 2;
+        other.y += pushY * overlap / 2;
+    }
 }
+
 }
