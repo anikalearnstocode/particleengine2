@@ -1,3 +1,10 @@
+// GameState.java
+// com.particleengineREAL2
+// Anika Krieger
+// Particle Engine 3
+// Description: Abstract class representing the game state. Manages shape initialization, score handling, input handling, and state transitions for different shapes.
+
+
 package com.particleengineREAL2;
 
 import java.util.ArrayList;
@@ -5,77 +12,91 @@ import processing.core.PApplet;
 
 public abstract class GameState {
     protected Main main; // Reference to the main application
-    protected static int totalScore; // Use static for cumulative score
-    protected ArrayList<Shape> shapes; // Combined shapes list
-    protected Shape selectedShape;
-    protected float tubX, tubY, pixelWidth, pixelHeight;
-    protected boolean isEndState = false;
+    protected static int totalScore; // Cumulative score across game states
+    protected ArrayList<Shape> shapes; // List to store shapes in the current state
+    protected Shape selectedShape; // Currently selected shape
+    protected float tubX, tubY, pixelWidth, pixelHeight; // Bath tub dimensions
+    protected boolean isEndState = false; // Flag to indicate if the game has ended
 
+    // Constructor to link back to the Main application
     public GameState(Main main) {
-        this.main = main; // Link back to the main class
-        this.shapes = new ArrayList<>();
+        this.main = main; // Initialize main reference
+        this.shapes = new ArrayList<>(); // Initialize the shapes list
     }
 
-    public void initializeShapes() {
-        // Add shapes to the list (potentially from a factory method)
-    }
+    // Abstract method for initializing shapes, to be implemented by subclasses
+    public void initializeShapes() {}
 
+    // Increment the score by one
     public static void incrementScore() {
         totalScore++;
     }
 
+    // Display the current score on the screen
     public void displayScore() {
-        main.textSize(30);
-        main.fill(0);
-        main.text("Score: " + totalScore, 100, 50);
+        main.textSize(30); // Set text size
+        main.fill(0); // Set text color to black
+        main.text("Score: " + totalScore, 100, 50); // Display score at specified position
     }
 
+    // Main draw method to handle the rendering logic
     public void draw() {
+
         if (!isEndState) {
-            updateAndDrawShapes(); // Unified draw and update method
+            updateAndDrawShapes(); // Update and draw shapes if the game is not in end state
         } else {
-            handleEndState();
+            handleEndState(); // Handle the end state of the game
+            main.println("called");
         }
     }
 
-    public abstract void update(); // Update behavior specific to game state
-    
-    public abstract void handleInput(); // Method to handle input
+    // Abstract method for updating game logic, to be implemented by subclasses
+    public abstract void update();
 
+    // Abstract method for handling input, to be implemented by subclasses
+    public abstract void handleInput(); 
+
+    // Update shapes and check if they are in the bathtub
     public void updateAndDrawShapes() {
-        for (int i = shapes.size() - 1; i >= 0; i--) { // Iterate backwards to safely remove shapes
-            Shape shape = shapes.get(i); // Get the shape at index i
-            shape.update(shapes); // Polymorphic update
-            shape.draw();   // Polymorphic draw
+        // Iterate backwards through the shapes list for safe removal
+        for (int i = shapes.size() - 1; i >= 0; i--) {
+            Shape shape = shapes.get(i); // Get the current shape
+            shape.update(shapes); // Call the shape's update method
+            shape.draw();   // Call the shape's draw method
             
+            // Check if the shape is in the bathtub
             if (isInBathtub(shape)) {
-                shapes.remove(i);
+                shapes.remove(i); // Remove shape if it is in the bathtub
                 if (shape == selectedShape) {
-                    incrementScore();
+                    incrementScore(); // Increment score if selected shape is removed
                 }
             }
-
-            if (shapes.isEmpty()) {
-                handleEndState();
-            }
+        }
+        // Check if there are no shapes left
+        if (shapes.isEmpty()) {
+            handleEndState(); // Handle the end of the game
         }
     }
 
+    // Check if a shape is within the bathtub bounds
     protected boolean isInBathtub(Shape shape) {
-        float[] tubBounds = main.getBathTubBounds();
+        float[] tubBounds = main.getBathTubBounds(); // Get bathtub boundaries
         return shape.x > tubBounds[0] && shape.x < tubBounds[0] + tubBounds[2] &&
-               shape.y > tubBounds[1] && shape.y < tubBounds[1] + tubBounds[3];
+               shape.y > tubBounds[1] && shape.y < tubBounds[1] + tubBounds[3]; // Check position
     }
 
+    // Handle the end state of the game
     protected void handleEndState() {
-        String endMessage = "";
-        String nextStateMessage = "";
+        String endMessage = ""; // Message to display at the end
+        String nextStateMessage = ""; // Message for the next state
 
+        // Set end state flag if not already set
         if (!isEndState) {
-            isEndState = true;
-            finalScoreCount();
+            isEndState = true; // Update flag
+            finalScoreCount(); // Final score counting logic
         }
 
+        // Set messages based on the current state
         if (this instanceof CircleState) {
             endMessage = "All circle toys in the tub!!";
             nextStateMessage = "Press T for triangle round!";
@@ -85,51 +106,58 @@ public abstract class GameState {
         } else if (this instanceof SquareState) {
             endMessage = "All squares in the bathtub!";
             nextStateMessage = "Game over!";
-            finalScoreCount();
-        }
+            finalScoreCount(); // Count final score in square state
+        } 
 
-        main.textSize(40);
-        main.fill(0);
-        main.textAlign(PApplet.CENTER);
-        main.text(endMessage, main.width / 2, main.height / 2);
-        main.text(nextStateMessage, main.width / 3, main.height / 3);
+        // Display end state messages
+        main.textSize(40); // Set larger text size for end state
+        main.fill(0); // Set text color to black
+        main.textAlign(PApplet.CENTER); // Center align text
+        main.text(endMessage, main.width / 2, main.height / 2); // Display end message
+        main.text(nextStateMessage, main.width / 3, main.height / 3); // Display next state message
     }
 
+    // Mouse press event handling
     public void mousePressed(int mouseX, int mouseY) {
         // Check if any shape is clicked and select it
         for (Shape shape : shapes) {
             if (shape.isMouseOver(mouseX, mouseY) || shape.isClicked(mouseX, mouseY)) {
-                shape.select();
-                selectedShape = shape;
-                break;
+                shape.select(); // Select the shape
+                selectedShape = shape; // Store reference to the selected shape
+                break; // Exit loop once a shape is selected
             }
         }
     }
 
+    // Mouse drag event handling
     public void mouseDragged(int mouseX, int mouseY) {
         if (selectedShape != null) {
+            // Update the position of the selected shape
             selectedShape.x = mouseX;
             selectedShape.y = mouseY;
 
+            // Check if the selected shape is within the bathtub bounds
             if (selectedShape.x > tubX && selectedShape.x < tubX + pixelWidth 
                 && selectedShape.y > tubY && selectedShape.y < tubY + pixelHeight) {
-                incrementScore();
-                System.out.println("Score increased! Current Score: " + totalScore); // Debugging
+                incrementScore(); // Increment score if the shape is in the bathtub
+                System.out.println("Score increased! Current Score: " + totalScore); // Debugging output
             }
         }
     }
 
+    // Mouse release event handling
     public void mouseReleased() {
         if (selectedShape != null) {
-            selectedShape.deselect();
+            selectedShape.deselect(); // Deselect the shape
         }
-        selectedShape = null;
+        selectedShape = null; // Clear selected shape reference
     }
 
+    // Display the final score count at game over
     public void finalScoreCount() {
         if (isEndState) {
-            main.text("Game Over!", main.width / 2, main.height / 2 + 20);
-            // main.text("Total Score: " + totalScore, main.width / 2, main.height / 2 - 50);
+            main.text("Game Over!", main.width / 2, main.height / 2 + 20); // Display game over message
+            //main.text("Total Score: " + totalScore, main.width / 2, main.height / 2 - 50); // Total score (commented out)
         }
     }
 }
