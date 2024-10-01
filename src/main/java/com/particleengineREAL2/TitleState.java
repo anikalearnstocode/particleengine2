@@ -1,6 +1,8 @@
 // TitleScreenState.java
 package com.particleengineREAL2;
 
+import processing.core.PApplet;
+
 public class TitleState extends GameState {
 
     public TitleState(Main main) {
@@ -9,12 +11,26 @@ public class TitleState extends GameState {
 
     @Override
     public void draw() {
-        main.drawTitleState(); // Call method from Main to draw title
+        main.background(255);
+        main.getBathTubImage();
+
+        main.textSize(48);
+        main.fill(0);
+        main.textAlign(PApplet.CENTER);
+        main.text("Particle Engine Game", main.width / 2, main.height / 2 - 50);
+        main.text("Press 'P' to Play with Circles", main.width / 2, main.height / 2 + 20);
+
+
     }
 
     @Override
     public void update() {
         // No updates needed on the title screen
+    }
+
+    public void keyPressed()
+    {
+        
     }
 
     @Override

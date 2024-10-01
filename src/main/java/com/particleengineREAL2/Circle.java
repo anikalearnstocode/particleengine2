@@ -8,11 +8,13 @@ Description: Circle - sets up circular particle and movement
 
 package com.particleengineREAL2;
 
+import java.util.ArrayList;
+
 import processing.core.PApplet;
 
 public class Circle extends Shape {
 
-    private int color;
+    public int color;
     
     public Circle(float x_, float y_, float size_, PApplet main_, float xVel_, float yVel_) { // Constructor for Square class
         super(x_, y_, size_, main_, xVel_, yVel_); // Call to parent class constructor
@@ -21,9 +23,12 @@ public class Circle extends Shape {
 
     @Override
     public void draw() {
-        main.fill(color);
+        drawShape();
+        //main.fill(color);
         main.ellipse(x, y, size, size); // Draw circle
     }
+    
+    
 
     @Override
     public void move() {
@@ -33,16 +38,20 @@ public class Circle extends Shape {
 
     @Override
     public boolean isClicked(float mx, float my) {
-        float radius = size / 2;
-        return PApplet.dist(mx, my, x, y) < radius; // Check if clicked within radius
+        return isMouseOver(mx, my);
     }
 
     @Override
-    public void update() {
+    public void update(ArrayList<Shape> shapes) {
         move();  
         checkBoundary(); 
-
+        for (Shape other : shapes) {
+            if (other instanceof Circle && other != this && checkCollission(other)) {
+                handleCollision(other); // Handle collision with another Circle
+            }
+        }
     }
+    
 
     public void mouseClicked() {
         color = main.color(0,255,0);

@@ -8,6 +8,8 @@ Description: TriangleParticle - sets up triangular particle and movement
 
 package com.particleengineREAL2;
 
+import java.util.ArrayList;
+
 import processing.core.PApplet;
 
 public class Triangle extends Shape {
@@ -36,9 +38,14 @@ public class Triangle extends Shape {
     }
 
     @Override
-    public void update() {
+    public void update(ArrayList<Shape> shapes) {
         move();  
         checkBoundary(); 
+        for (Shape other : shapes) {
+            if (other instanceof Triangle && other != this && checkCollission(other)) {
+                handleCollision(other); // Handle collision with another Circle
+            }
+        }
     }
 
     public void mouseClicked() {

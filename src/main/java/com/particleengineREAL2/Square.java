@@ -8,6 +8,8 @@ Description: SquareParticle - sets up square particle and movement
 
 package com.particleengineREAL2;
 
+import java.util.ArrayList;
+
 import processing.core.PApplet;
 
 public class Square extends Shape {
@@ -34,10 +36,14 @@ public class Square extends Shape {
     }
 
     @Override
-    public void update() {
+    public void update(ArrayList<Shape> shapes) {
         move();  
         checkBoundary(); 
- 
+        for (Shape other : shapes) {
+            if (other instanceof Square && other != this && checkCollission(other)) {
+                handleCollision(other); // Handle collision with another Circle
+            }
+        }
     }
 
     public void mouseClicked() {

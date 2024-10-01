@@ -17,6 +17,7 @@ public abstract class Shape {
     float xVel;
     float yVel;
     PApplet main;
+    boolean isSelected;
 
     // Constructor to initialize common attributes
     Shape(float x_, float y_, float size_, PApplet main_, float xVel_, float yVel_) {
@@ -26,6 +27,7 @@ public abstract class Shape {
         this.main = main_;       
         this.xVel = xVel_; // X velocity
         this.yVel = yVel_; // Y velocity
+        this.isSelected = false;
     }
 
     // Change the type to ArrayList<Shape> (not Shapes) to store different shapes
@@ -37,7 +39,7 @@ public abstract class Shape {
 
         // Use main.random() to call random() from the PApplet instance
         for (int i = 0; i < totalShapes; i++) {
-            float size = main.random(30, 50);  // Corrected random call
+            float size = main.random(50, 80);  // Corrected random call
             float x = main.random(main.width);
             float y = main.random(main.height);
             float speedX = main.random(-2, 2);
@@ -56,9 +58,17 @@ public abstract class Shape {
         return shapes;
     }
 
+    protected void drawShape() {
+        if (isSelected) {
+            main.fill(0, 255, 0); // Change to green if selected
+        } else {
+            main.fill(0); // Default color is black
+        }
+    }
+
     // Abstract methods to be implemented by subclasses
     public abstract void draw();  // Each shape will implement its own drawing logic
-    public abstract void update(); // Each shape can have its own movement logic
+    public abstract void update(ArrayList<Shape> shapes); // Pass shapes list for collision checks
     public abstract void mouseClicked();
 
     // Common move behavior for all shapes
@@ -93,9 +103,44 @@ public abstract class Shape {
         this.size = newSize;
     }
 
-    // Optional: Add mouse interaction methods
-    public boolean isClicked(float mx, float my) {
-        // Generic bounding box check (can be overridden by subclasses for more precise detection)
+    public boolean isMouseOver(float mx, float my)
+    {
         return mx >= x - size / 2 && mx <= x + size / 2 && my >= y - size / 2 && my <= y + size / 2;
     }
+
+    public void shapeColor()
+    {
+        if (isSelected)
+        {
+            main.fill(0, 255, 0);
+        } else {
+            main.fill(0);
+        }
+        draw();
+    }
+
+    public void select() {
+        isSelected = true;
+    }
+
+    public void deselect() {
+        isSelected = false;
+    }
+
+    public boolean isClicked(float mx, float my) {
+        return isMouseOver(mx, my);
+    }
+
+    public boolean checkCollission(Shape other) {
+        float distance = PApplet.dist(this.x, this.y, other.x, other.y);
+        return distance < (this.size / 2 + other.size / 2);
+    }
+
+    public void handleCollision(Shape other) {
+        // Reverse the direction of both shapes
+        this.xVel *= -1;
+        this.yVel *= -1;
+        other.xVel *= -1;
+        other.yVel *= -1;
+}
 }
