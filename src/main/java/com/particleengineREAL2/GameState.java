@@ -1,13 +1,12 @@
 package com.particleengineREAL2;
 
 import java.util.ArrayList;
-
 import processing.core.PApplet;
 
 public abstract class GameState {
     protected Main main; // Reference to the main application
     protected static int totalScore; // Use static for cumulative score
-    protected ArrayList<Shape> shapes;
+    protected ArrayList<Shape> shapes; // Combined shapes list
     protected Shape selectedShape;
     protected float tubX, tubY, pixelWidth, pixelHeight;
     protected boolean isEndState = false;
@@ -17,7 +16,9 @@ public abstract class GameState {
         this.shapes = new ArrayList<>();
     }
 
-    public void initializeShapes() {}
+    public void initializeShapes() {
+        // Add shapes to the list (potentially from a factory method)
+    }
 
     public static void incrementScore() {
         totalScore++;
@@ -31,22 +32,22 @@ public abstract class GameState {
 
     public void draw() {
         if (!isEndState) {
-            updateAndDrawShapes();
+            updateAndDrawShapes(); // Unified draw and update method
         } else {
             handleEndState();
         }
     }
 
-    public abstract void update();
+    public abstract void update(); // Update behavior specific to game state
     
     public abstract void handleInput(); // Method to handle input
-    
+
     public void updateAndDrawShapes() {
         for (int i = shapes.size() - 1; i >= 0; i--) { // Iterate backwards to safely remove shapes
             Shape shape = shapes.get(i); // Get the shape at index i
             shape.update(shapes); // Polymorphic update
             shape.draw();   // Polymorphic draw
-         
+            
             if (isInBathtub(shape)) {
                 shapes.remove(i);
                 if (shape == selectedShape) {
@@ -85,7 +86,7 @@ public abstract class GameState {
             endMessage = "All squares in the bathtub!";
             nextStateMessage = "Game over!";
             finalScoreCount();
-        } 
+        }
 
         main.textSize(40);
         main.fill(0);
@@ -126,9 +127,9 @@ public abstract class GameState {
     }
 
     public void finalScoreCount() {
-        if (isEndState = true) {
+        if (isEndState) {
             main.text("Game Over!", main.width / 2, main.height / 2 + 20);
-            //main.text("Total Score: " + totalScore, main.width / 2, main.height / 2 - 50);
+            // main.text("Total Score: " + totalScore, main.width / 2, main.height / 2 - 50);
         }
     }
 }
